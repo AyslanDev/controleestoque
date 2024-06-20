@@ -1,0 +1,19 @@
+{
+    "name": "ayslan/estoque",
+    "autoload": {
+        "psr-4": {
+            "Ayslan\\Estoque\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "ayslan",
+            "email": "ayslan@assesi.com"
+        }
+    ],
+    "require": {
+        "smarty/smarty": "^5.3",
+        "coffeecode/router": "^2.0",
+        "twbs/bootstrap": "5.3.3"
+    }
+}
