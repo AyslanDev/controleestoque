@@ -61,3 +61,7 @@ $router->post("/produto/entrada", function() use ($pdo){
 //FIM POST METHOD
 
 $router->dispatch();
+
+if ($router->error()) {
+    $router->redirect("/");
+}
