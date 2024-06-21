@@ -87,9 +87,17 @@
     <script src="../src/assets/js/datatables-simple-demo.js"></script>
     <script src="../src/assets/js/scripts.js"></script>
     <script>
-        $(document).ready(function() {
-            $('.select2').select2();
-        });
+        $('#modalEdit').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            var produto = button.data('produto')
+            var valor = button.data('valor')
+            var idProduto = button.data('idProduto')
+            var modal = $(this)
+            modal.find('.modal-title').text('Alterar: ' + produto)
+            modal.find('.modal-body #produto').val(produto)
+            modal.find('.modal-body #valor').val(valor)
+            modal.find('.modal-body #idProduto').val(idProduto)
+        })
     </script>
 </body>
 

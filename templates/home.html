@@ -10,10 +10,10 @@
       <div class="row">
         <div class="col-xl-4 col-md-6">
           <div class="card bg-danger text-white mb-4">
-            <div class="card-body">Produtos em zona vermelha</div>
+            <div class="card-body">Produtos em zona vermelha - {$quant}</div>
             <div class="card-footer d-flex align-items-center justify-content-between">
-              <a class="small text-white stretched-link" href="#">Ver produtos</a>
-              <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+              <button type="button" class="small text-white stretched-link" data-bs-toggle="modal"
+                data-bs-target="#staticBackdrop" style="border: none; background: none;">Ver produtos</button>
             </div>
           </div>
         </div>
@@ -33,12 +33,15 @@
               <tr>
                 <td> <b class=""> {$item.product}</b> <br> {$item.quantity} unidades </td>
                 <td style="text-align: end;"> <b> R${$item.value} </b> </td>
-                <td class="text-center"><a href="/listagem/{$product.Id}" class="btn btn-primary"><i class="bi bi-pencil-square"></i></a> <a href="/delete/{$product.Id}" class="btn btn-danger"><i class="bi bi-x-square"></i></a></td>
+                <td class="text-center"><button class="btn btn-primary" data-bs-toggle="modal"
+                    data-bs-target="#modalEdit" data-produto="{$item.product}" data-valor="{$item.value}" data-idProduto="{$item.Id}"><i
+                      class="bi bi-pencil-square"></i></button> <button class="btn btn-danger"><i
+                      class="bi bi-x-square"></i></button></td>
               </tr>
               {/foreach}
           </table>
         </div>
-        
+
       </div>
     </div>
   </main>
@@ -51,4 +54,56 @@
     </div>
   </footer>
 </div>
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Produtos em Zona Vermelha</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {foreach item=item from=$products2}
+        <p class="my-1"> <b class="text-danger"> {$item.product}</b> - {$item.quantity} unidades </p>
+        {/foreach}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalEdit" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Produtos em Zona Vermelha</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="/produto/editar" method="post">
+          <input type="hidden" name="idProduto" id="idProduto">
+          <div class="row">
+            <div class="col-md-12 mb-3">
+              <input type="text" name="product" class="form-control" id="produto">
+            </div>
+            <div class="col-md-12 mb-3">
+              <input type="text" name="value" class="form-control" id="valor">
+            </div>
+          </div>
+          <div class="col-12">
+            <button class="btn btn-primary" type="submit">Alterar</button>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 {/block}

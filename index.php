@@ -58,6 +58,10 @@ $router->post("/produto/entrada", function() use ($pdo){
     include 'src/controllers/entrataPostController.php';
 });
 
+$router->post("/produto/editar", function() use ($pdo){
+    include 'src/controllers/alterarPostController.php';
+});
+
 //FIM POST METHOD
 
 $router->dispatch();

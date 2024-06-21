@@ -8,7 +8,6 @@
 // 
 
 window.addEventListener('DOMContentLoaded', event => {
-
     // Toggle the side navigation
     const sidebarToggle = document.body.querySelector('#sidebarToggle');
     if (sidebarToggle) {
@@ -25,4 +24,3 @@ window.addEventListener('DOMContentLoaded', event => {
 
 });
 
-console.log("teste")
