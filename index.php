@@ -16,84 +16,48 @@ $smarty->setCompileDir("templates_c");
 
 include 'src/database/padrao.php';
 
+//GET METHOD
+
 $router->get("/", function() use ($smarty) {
-
-    if (!isset($_SESSION['csrf_token'])) {
-        $csrf_token = bin2hex(random_bytes(32));
-        $_SESSION['csrf_token'] = $csrf_token;
-    }else{
-        $csrf_token =  $_SESSION['csrf_token'];
-    }
-    
-    $smarty->assign("csrf", $csrf_token);
-    $smarty->display("login.html");
-});
-
-$router->post("/login", function() use ($pdo, $smarty) {
-
-    if($_SESSION['csrf_token'] == $_POST['token']){
-
-        $username = $_POST["username"];
-        $password = md5($_POST["password"]);
-        $stmt = $pdo->prepare("SELECT * FROM usuarios WHERE (name = :username AND cript_password = :password)");
-        $stmt->bindParam(':username', $username);
-        $stmt->bindParam(':password', $password);
-        $stmt->execute();
-        $user = $stmt->fetch();
-        if ($stmt->rowCount() > 0) {
-            $_SESSION['user'] = $user;
-            header("Location: /listagem");
-        } else {
-            header("Location: /");
-        }
-    }
-
+    include 'src/controllers/indexController.php';
 });
 
 $router->get("/listagem", function() use($smarty, $pdo){
-    if(!isset($_SESSION['user'])){
-        header("Location: /");
-    }
+    include 'src/controllers/listagemController.php';
+});
 
-    $stmt = $pdo->prepare("SELECT * FROM produtos");
-    $stmt->execute();
-    $products = $stmt->fetchAll();
-    // var_dump($products);
-    $smarty->assign("products", $products);
-    $smarty->display("home.html");
+$router->get("/adicionar", function() use($smarty){
+    include 'src/controllers/adicionarController.php';
+});
+
+$router->get("/baixa", function() use($smarty, $pdo){
+    include 'src/controllers/baixaController.php';
+});
+
+$router->get("/entrada", function() use($smarty, $pdo){
+    include 'src/controllers/entrataController.php';
+});
+
+//FIM GET METHOD
+
+//POST METHOD
+
+$router->post("/login", function() use ($pdo, $smarty) {
+    include 'src/controllers/loginController.php';
 });
 
 $router->post("/cadastrar", function() use ($pdo){
-    if(!isset($_SESSION['user'])){
-        header("Location: /");
-    }
-    $product = $_POST["product"];
-    $quantity = $_POST["quantity"];
-    $value = $_POST["value"];
-    
-    $stmt = $pdo->prepare("INSERT INTO produtos (product, quantity, value) VALUES (:product, :quantity, :value)");
-    $stmt->bindParam(':product', $product);
-    $stmt->bindParam(':quantity', $quantity);
-    $stmt->bindParam(':value', $value);
-   
-    try {
-
-        $stmt->execute();
-        // echo "Registro inserido com sucesso!";
-        header("Location: /listagem");
-    } catch (PDOException $e) {
-        echo "Erro ao inserir registro: " . $e->getMessage();
-    }
-
+    include 'src/controllers/cadastrarController.php';
 });
 
-$router->post("/data/{acao}", function($acao) use($pdo){
-    if(!isset($_SESSION['user'])){
-        header("Location: /");
-    }
-
-    require "src/api/data.php";
-
+$router->post("/produto/baixa", function() use ($pdo){
+    include 'src/controllers/baixaPostController.php';
 });
+
+$router->post("/produto/entrada", function() use ($pdo){
+    include 'src/controllers/entrataPostController.php';
+});
+
+//FIM POST METHOD
 
 $router->dispatch();

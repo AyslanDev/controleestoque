@@ -1,13 +1,20 @@
-{extends file=theme.html}
+{extends file="theme.html"}
 {block name=body}
-<section id="cadastro" class="mt-5">
-    <div class="container d-flex justify-content-center">
-      <div class="card w-80">
-        <div class="card-body">
-          <h5 class="card-title">Cadastro de produtos</h5>
-  
-          <form class="row g-3 form_submit" action="/cadastrar" method="POST">
-            <input type="hidden" name="token" value="{$csrf}">
+<div id="layoutSidenav_content">
+  <main>
+    <div class="container-fluid px-4">
+      <h1 class="mt-4">Cadastrar</h1>
+      <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item active">Entrada de produtos</li>
+      </ol>
+      <div class="row">
+        <div class="card">
+          <div class="pt-4 pb-2">
+            <h5 class="card-title text-center pb-0 fs-4">Novo produto</h5>
+            <p class="text-center small">Preencha os dados do novo produto</p>
+          </div>
+          <form class="row g-3 form_submit pb-5 pt-2" action="/cadastrar" method="POST">
+            <input type="hidden" name="token" value="">
             <div class="col-md-12">
               <input type="text" class="form-control" name="product" placeholder="Produto">
             </div>
@@ -15,15 +22,15 @@
               <input type="number" class="form-control" name="quantity" placeholder="Quantidade">
             </div>
             <div class="col-md-6">
-              <input type="number" class="form-control" name="value" placeholder="Valor">
+              <input type="text" class="form-control" name="value" placeholder="Valor">
             </div>
             <div class="text-center">
               <button type="submit" class="btn btn-primary">Cadastrar</button>
             </div>
           </form>
-    
         </div>
       </div>
     </div>
-  </section>   
+  </main>
+</div>
 {/block}
