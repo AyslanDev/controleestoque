@@ -13,24 +13,40 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="../src/assets/css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <style>
+
+    .flex_mb_lg {
+        padding: 0 !important;
+    }
+
+    @media screen and (min-width: 800px) {
+        .flex_mb_lg {
+            padding: 3em 6em 0 6em !important;
+        }
+    }
+
+    @media screen and (min-width: 1200px) {
+        .flex_mb_lg {
+            padding: 3em 10em 0 10em !important;
+        }
+    }
+
+    
+    </style>
 </head>
 
 <body class="sb-nav-fixed">
     {if $VTopo != "N"}
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
         <!-- Navbar Brand-->
-        <a class="navbar-brand ps-3" href="index.html">SSG - SGControle</a>
+        <a class="navbar-brand ps-3" href="/listagem">SSG - SGControle</a>
         <!-- Sidebar Toggle-->
         <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i
                 class="fas fa-bars"></i></button>
         <!-- Navbar Search-->
         <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
-            <div class="input-group">
-                <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..."
-                    aria-describedby="btnNavbarSearch" />
-                <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i
-                        class="fas fa-search"></i></button>
-            </div>
+         
         </form>
         <!-- Navbar-->
         <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
@@ -38,12 +54,7 @@
                 <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
                     aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="#!">Settings</a></li>
-                    <li><a class="dropdown-item" href="#!">Activity Log</a></li>
-                    <li>
-                        <hr class="dropdown-divider" />
-                    </li>
-                    <li><a class="dropdown-item" href="#!">Logout</a></li>
+                    <li><a class="dropdown-item" href="/logout">Logout</a></li>
                 </ul>
             </li>
         </ul>
@@ -60,17 +71,17 @@
                             <div class="sb-nav-link-icon"><i class="bi bi-table"></i></div>
                             Estoque
                         </a>
-                        <a class="nav-link" href="/adicionar">
-                            <div class="sb-nav-link-icon"><i class="bi bi-plus-square"></i></div>
+                        <a class="nav-link" href="/adicionar"></i>
+                            <div class="sb-nav-link-icon"><i class="bi bi-box-seam"></i></div>
                             Adicionar produto
+                        </a>
+                        <a class="nav-link" href="/entrada">
+                            <div class="sb-nav-link-icon"><i class="bi bi-plus-square"></i></div>
+                            Dar entrada
                         </a>
                         <a class="nav-link" href="/baixa">
                             <div class="sb-nav-link-icon"><i class="bi bi-dash-square"></i></div>
                             Dar baixa
-                        </a>
-                        <a class="nav-link" href="/entrada">
-                            <div class="sb-nav-link-icon"><i class="bi bi-dash-square"></i></div>
-                            Dar entrada
                         </a>
             </nav>
         </div>
@@ -78,6 +89,7 @@
         {block name=body}{/block}
     </div>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
@@ -90,14 +102,35 @@
         $('#modalEdit').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget)
             var produto = button.data('produto')
-            var valor = button.data('valor')
-            var idProduto = button.data('idProduto')
+            var val = button.data('val')
+            var minima = button.data('zv')
+            var idProduto = button.data('id')
+            console.log(val);
             var modal = $(this)
             modal.find('.modal-title').text('Alterar: ' + produto)
             modal.find('.modal-body #produto').val(produto)
-            modal.find('.modal-body #valor').val(valor)
+            modal.find('.modal-body #val').val(val)
+            modal.find('.modal-body #minima').val(minima)
             modal.find('.modal-body #idProduto').val(idProduto)
         })
+
+        $('#modalDelet').on('show.bs.modal', function (event) {
+            var btn = $(event.relatedTarget)
+            var product = btn.data('product')
+            var valildade = btn.data('valildade')
+            var quant = btn.data('quant')
+            var idpro = btn.data('idpro')
+
+            var modal = $(this)
+            modal.find('.modal-title').text('Excluir: ' + product)
+            modal.find('.modal-body #product').text(product)
+            modal.find('.modal-body #quant').text(quant)
+            modal.find('.modal-body #valildade').text(valildade)
+            modal.find('.modal-body #idpro').val(idpro)
+        })
+        $(document).ready(function(){
+            $('.data').mask('00/00/0000');
+    });
     </script>
 </body>
 

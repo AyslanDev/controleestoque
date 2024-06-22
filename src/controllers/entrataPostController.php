@@ -6,6 +6,30 @@ if(!isset($_SESSION['user'])){
 $product = $_POST["product"];
 $quantity = $_POST["quantity"];
 
+
+if($product == "" || $quantity == "") {
+    echo "
+    <!DOCTYPE html>
+    <html lang='en'>    
+    <head>
+        <script src='https://cdn.jsdelivr.net/npm/sweetalert2@10'></script>
+    </head>
+    <body>
+        <script>
+            Swal.fire({
+                title: 'Opss!',
+                text: 'Preencha todos os campos.',
+                icon: 'error'
+            }).then(function() {
+                window.location = '/entrada'; // Redireciona até a listagem
+            });
+        </script>
+    </body>
+    </html>";
+
+    exit;
+}
+
 $stmt = $pdo->prepare("UPDATE produtos SET quantity = quantity + :quantity WHERE Id = :product");
 $stmt->bindParam(':product', $product);
 $stmt->bindParam(':quantity', $quantity);
@@ -13,7 +37,25 @@ $stmt->bindParam(':quantity', $quantity);
 try {
 
     $stmt->execute();
-    header("Location: /entrada");
+
+    echo "
+    <!DOCTYPE html>
+    <html lang='en'>    
+    <head>
+        <script src='https://cdn.jsdelivr.net/npm/sweetalert2@10'></script>
+    </head>
+    <body>
+        <script>
+            Swal.fire({
+                title: 'Sucesso!',
+                text: 'Sua operação foi bem-sucedida.',
+                icon: 'success'
+            }).then(function() {
+                window.location = '/listagem'; // Redireciona até a listagem
+            });
+        </script>
+    </body>
+    </html>";
  } catch (PDOException $e) {
     echo "Erro ao inserir registro: " . $e->getMessage();
 }

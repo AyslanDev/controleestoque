@@ -7,10 +7,19 @@
       <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item active">Entrada e saída</li>
       </ol>
-      <div class="row">
+      <div class="row d-flex justify-content-center">
         <div class="col-xl-4 col-md-6">
+          <div class="card bg-primary text-white mb-4">
+            <div class="card-body">Produtos fora da validade - {$vencidos}</div>
+            <div class="card-footer d-flex align-items-center justify-content-between">
+              <button type="button" class="small text-white stretched-link" data-bs-toggle="modal"
+                data-bs-target="#modalVencidos" style="border: none; background: none;">Ver produtos</button>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-4 col-md-6 p-0 pe-2">
           <div class="card bg-danger text-white mb-4">
-            <div class="card-body">Produtos em zona vermelha - {$quant}</div>
+            <div class="card-body">Produtos em baixo estoque - {$quant}</div>
             <div class="card-footer d-flex align-items-center justify-content-between">
               <button type="button" class="small text-white stretched-link" data-bs-toggle="modal"
                 data-bs-target="#staticBackdrop" style="border: none; background: none;">Ver produtos</button>
@@ -24,18 +33,23 @@
             <thead>
               <tr>
                 <th> Produto </th>
-                <th class="text-end"> Valores</th>
+                <th> Quantidade</th>
+                <th> Quantidade mínima</th>
+                <th> Validade</th>
                 <th class="text-center">Ações</th>
               </tr>
             </thead>
             <tbody>
               {foreach item=item from=$products}
               <tr>
-                <td> <b class=""> {$item.product}</b> <br> {$item.quantity} unidades </td>
-                <td style="text-align: end;"> <b> R${$item.value} </b> </td>
+                <td> {$item.product} </td>
+                <td> {$item.quantity} unidades </td>
+                <td> {$item.ZV} unidades </td>
+                <td> {$item.validade|date_format:"%d/%m/%Y"}  </td>
                 <td class="text-center"><button class="btn btn-primary" data-bs-toggle="modal"
-                    data-bs-target="#modalEdit" data-produto="{$item.product}" data-valor="{$item.value}" data-idProduto="{$item.Id}"><i
-                      class="bi bi-pencil-square"></i></button> <button class="btn btn-danger"><i
+                    data-bs-target="#modalEdit" data-produto="{$item.product}" data-zv="{$item.ZV}" data-val="{$item.validade|date_format:'%d/%m/%Y'}" data-id="{$item.Id}"><i
+                      class="bi bi-pencil-square"></i></button> <button class="btn btn-danger" data-bs-toggle="modal" 
+                      data-bs-target="#modalDelet" data-product="{$item.product}" data-valildade="{$item.validade|date_format:'%d/%m/%Y'}" data-quant="{$item.quantity}" data-idpro="{$item.Id}"><i
                       class="bi bi-x-square"></i></button></td>
               </tr>
               {/foreach}
@@ -56,7 +70,7 @@
 </div>
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
   aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="staticBackdropLabel">Produtos em Zona Vermelha</h1>
@@ -64,7 +78,29 @@
       </div>
       <div class="modal-body">
         {foreach item=item from=$products2}
-        <p class="my-1"> <b class="text-danger"> {$item.product}</b> - {$item.quantity} unidades </p>
+        <p class="my-1"> <i class="bi bi-square-fill text-danger" style="font-size: 14px;"></i> <b> {$item.product}</b> - {$item.quantity} unidades </p>
+        <p> Mínima: <b class="text-danger" style="font-size: 12px; font-style: italic;"> {$item.ZV} <i class="bi bi-diagram-3"></i></b> </p>
+        {/foreach}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalVencidos" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Produtos em vencimento</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {foreach item=item from=$products3}
+        <p class="my-1"> <i class="bi bi-square-fill text-danger" style="font-size: 14px;"></i> <b>{$item.product}</b> - {$item.quantity} unidades </p>
+        <p> Validade <b class="text-danger" style="font-size: 12px; font-style: italic;"> {$item.validade|date_format:"%d/%m/%Y"} <i class="bi bi-calendar-week"></i></b> </p>
         {/foreach}
       </div>
       <div class="modal-footer">
@@ -76,10 +112,10 @@
 
 <div class="modal fade" id="modalEdit" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
   aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="staticBackdropLabel">Produtos em Zona Vermelha</h1>
+        <h1 class="modal-title fs-5" id="staticBackdropLabel"></h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -87,10 +123,16 @@
           <input type="hidden" name="idProduto" id="idProduto">
           <div class="row">
             <div class="col-md-12 mb-3">
+              <label for="product" class="form-label">Produto</label>
               <input type="text" name="product" class="form-control" id="produto">
             </div>
             <div class="col-md-12 mb-3">
-              <input type="text" name="value" class="form-control" id="valor">
+              <label for="product" class="form-label">Quantidade mínima</label>
+              <input type="text" name="minima" class="form-control" id="minima">
+            </div>
+            <div class="col-md-12 mb-3">
+              <label for="value" class="form-label">Validade</label>
+              <input type="text" name="validade" class="form-control data" id="val">
             </div>
           </div>
           <div class="col-12">
@@ -98,12 +140,33 @@
           </div>
         </form>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-      </div>
     </div>
   </div>
 </div>
 
+<div class="modal fade" id="modalDelet" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel"></h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="/produto/delet" method="post">
+          <input type="hidden" name="idProduto" id="idpro">
+          <p class="my-1"> <i class="bi bi-square-fill text-danger" style="font-size: 14px;"></i> 
+            <b id="product"></b> - <b id="quant" style="font-weight: normal;"></b> unidades </p>
+          <p> Validade <b class="text-danger" style="font-size: 12px; font-style: italic;"> <b id="valildade"style="font-weight: normal;"></b> <i class="bi bi-calendar-week"></i></b> </p>
+
+          </div>
+          <div class="col-12 text-center pb-2">
+            <button class="btn btn-danger" type="submit">Excluir</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
 {/block}
