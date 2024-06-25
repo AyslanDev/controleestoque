@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="../src/assets/css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 </head>
 
 <body class="sb-nav-fixed">
@@ -91,12 +92,28 @@
             var button = $(event.relatedTarget)
             var produto = button.data('produto')
             var valor = button.data('valor')
-            var idProduto = button.data('idProduto')
+            var idProduto = button.data('id')
+            console.log(idProduto);
             var modal = $(this)
             modal.find('.modal-title').text('Alterar: ' + produto)
             modal.find('.modal-body #produto').val(produto)
             modal.find('.modal-body #valor').val(valor)
             modal.find('.modal-body #idProduto').val(idProduto)
+        })
+
+        $('#modalDelet').on('show.bs.modal', function (event) {
+            var btn = $(event.relatedTarget)
+            var product = btn.data('product')
+            var val = btn.data('val')
+            var quant = btn.data('quant')
+            var idpro = btn.data('idpro')
+            console.log(product);
+            var modal = $(this)
+            modal.find('.modal-title').text('Excluir: ' + product)
+            modal.find('.modal-body #product').text(product)
+            modal.find('.modal-body #quant').text(quant)
+            modal.find('.modal-body #val').text(val)
+            modal.find('.modal-body #idpro').val(idpro)
         })
     </script>
 </body>

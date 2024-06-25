@@ -1,5 +1,8 @@
 <?php
 session_start();
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 require 'vendor/autoload.php';
 
@@ -58,8 +61,12 @@ $router->post("/produto/entrada", function() use ($pdo){
     include 'src/controllers/entrataPostController.php';
 });
 
-$router->post("/produto/editar", function() use ($pdo){
+$router->post("/produto/editar", function() use ($pdo, $smarty){
     include 'src/controllers/alterarPostController.php';
+});
+
+$router->post("/produto/delet", function() use ($pdo, $smarty){
+    include 'src/controllers/deletPostController.php';
 });
 
 //FIM POST METHOD
