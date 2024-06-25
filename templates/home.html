@@ -17,7 +17,7 @@
             </div>
           </div>
         </div>
-        <div class="col-xl-4 col-md-6 p-0 pe-2">
+        <div class="col-xl-4 col-md-6">
           <div class="card bg-danger text-white mb-4">
             <div class="card-body">Produtos em baixo estoque - {$quant}</div>
             <div class="card-footer d-flex align-items-center justify-content-between">
@@ -29,7 +29,7 @@
       </div>
       <div class="row">
         <div class="card">
-          <table class="table">
+          <table class="table max-scale">
             <thead>
               <tr>
                 <th> Produto </th>
@@ -54,6 +54,29 @@
               </tr>
               {/foreach}
           </table>
+          <div class="table-responsive">
+            <table class="table min-scale">
+              <thead>
+                <tr>
+                  <th class="col-6"> Produto <br> </th>
+                  <th class="col-3"> Qtd. <br>  </th>
+                  <th class="col-3 text-center">Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                {foreach item=item from=$products}
+                <tr>
+                  <td class="col-6"> <b>{$item.product}</b> <br> V {$item.validade|date_format:"%d/%m/%Y"} </td>
+                  <td class="col-3"> <b>{$item.quantity} un</b> </td>
+                  <td class="col-3 text-center"><button class="btn btn-primary" data-bs-toggle="modal"
+                      data-bs-target="#modalEdit" data-produto="{$item.product}" data-zv="{$item.ZV}" data-val="{$item.validade|date_format:'%d/%m/%Y'}" data-id="{$item.Id}"><i
+                        class="bi bi-pencil-square"></i></button> <button class="btn btn-danger" data-bs-toggle="modal" 
+                        data-bs-target="#modalDelet" data-product="{$item.product}" data-valildade="{$item.validade|date_format:'%d/%m/%Y'}" data-quant="{$item.quantity}" data-idpro="{$item.Id}"><i
+                        class="bi bi-x-square"></i></button></td>
+                </tr>
+                {/foreach}
+            </table>
+          </div>
         </div>
 
       </div>
